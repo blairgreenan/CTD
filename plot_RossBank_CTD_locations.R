@@ -49,13 +49,25 @@ CTDData <- readMat("nbp1201_ctd.mat")
 library(tidyverse)
 library(lubridate)
 
+# Select survey 1 of Ross Bank
+CTD_RB1 <- which(CTDData$ctd.list[,1] %in% seq(37,57))
+# Select survey 2 of Ross Bank
+CTD_RB2 <- which(CTDData$ctd.list[,1] %in% seq(74,80))
 # latitude in decimal degrees
-lat_dec_deg <- CTDData$ctd.list[,8]
+lat_dec_deg <- CTDData$ctd.list[CTD_RB1,8]
 # longitude in decimal degrees
-lon_dec_deg <- CTDData$ctd.list[,9]
+lon_dec_deg <- CTDData$ctd.list[CTD_RB1,9]
 # convert negative longitude to positive by subtracting value from 360
 lon_dec_deg_neg <- (lon_dec_deg < 0)
 lon_dec_deg[lon_dec_deg_neg] = 360 + lon_dec_deg[lon_dec_deg_neg]
+
+# Find Station numbers associated with the Ross Bank CTD casts
+# Select survey 1 of Ross Bank
+STN_RB1 <- which(CTDData$ctd.data[,2] %in% seq(37,57))
+Station_RB1 <- unique(CTDData$ctd.data[STN_RB1,1])
+# Select survey 2 of Ross Bank
+STN_RB2 <- which(CTDData$ctd.data[,2] %in% seq(74,80))
+Station_RB2 <- unique(CTDData$ctd.data[STN_RB2,1])
 
 # Create a data frame for the CTD station positions
 dt2 <- data.frame(lat_dec_deg, lon_dec_deg)
@@ -64,10 +76,11 @@ dt2 <- data.frame(lat_dec_deg, lon_dec_deg)
 basemap(shapefiles = list(land = bs_land, glacier = bs_ice_shelves, bathy = bs_bathy, 
                           name = "AntarcticStereographic"), bathymetry = TRUE, glaciers = TRUE, 
         limits = c(165, -165, -78, -72), lon.interval = 5, lat.interval = 1, rotate = TRUE, base_size = 8) +  
-  geom_spatial_point(data = dt2, aes(x = lon_dec_deg, y = lat_dec_deg), color = "black", size = 0.1)
+  geom_spatial_point(data = dt2, aes(x = lon_dec_deg, y = lat_dec_deg), color = "black", size = 0.1) +
+  geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red", size = 0.1)
 
 # Use ggsave to save a high resolution png file
-#ggsave("RossSea_CTD_ggsave_zoom.png", width = 10, height = 8, units = c("cm"), dpi = 1200, bg = "white")
+ggsave("RossBank_CTD_ggsave.png", width = 10, height = 8, units = c("cm"), dpi = 1200, bg = "white")
 
 # dev.off()
 

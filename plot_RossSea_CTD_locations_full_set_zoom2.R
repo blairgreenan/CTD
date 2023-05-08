@@ -26,7 +26,7 @@ library(ggspatial)
 outPath <- "./Shapefiles"
 
 # Set projection to Antarctic polar stereographic
-projection <- "EPSG:3031"
+#projection <- "EPSG:3031"
 
 dev.new()
 
@@ -57,17 +57,20 @@ lon_dec_deg <- CTDData$ctd.list[,9]
 lon_dec_deg_neg <- (lon_dec_deg < 0)
 lon_dec_deg[lon_dec_deg_neg] = 360 + lon_dec_deg[lon_dec_deg_neg]
 
-# Create a data frame for the CTD station positions
+# Create a data frame for the VPR Tow 8 track positions
 dt2 <- data.frame(lat_dec_deg, lon_dec_deg)
 
 # Create plot using the ggOceanMaps & ggspatial packages
 basemap(shapefiles = list(land = bs_land, glacier = bs_ice_shelves, bathy = bs_bathy, 
                           name = "AntarcticStereographic"), bathymetry = TRUE, glaciers = TRUE, 
-        limits = c(165, -165, -78, -72), lon.interval = 5, lat.interval = 1, rotate = TRUE, base_size = 8) +  
-  geom_spatial_point(data = dt2, aes(x = lon_dec_deg, y = lat_dec_deg), color = "black", size = 0.1)
+        limits = c(174, -174, -78, -75), lon.interval = 1, rotate = TRUE, base_size = 8) +  
+  geom_point(data = dt2, aes(x = lon_dec_deg, y = lat_dec_deg), color = "black", size = 1) +  
+  geom_point(data = dt, aes(x = lon, y = lat), color = "red", size = 1) +
+  scale_y_continuous(breaks=c(-77, -76.8, -76.6, -76.4 -76.2)) +
+  theme(panel.grid = element_blank())
 
 # Use ggsave to save a high resolution png file
-#ggsave("RossSea_CTD_ggsave_zoom.png", width = 10, height = 8, units = c("cm"), dpi = 1200, bg = "white")
+ggsave("RossSea_CTD_ggsave_zoom.png", width = 10, height = 8, units = c("cm"), dpi = 1200, bg = "white")
 
 # dev.off()
 
