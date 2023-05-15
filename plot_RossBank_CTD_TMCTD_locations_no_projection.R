@@ -27,7 +27,7 @@ CTDData <- readMat("nbp1201_ctd.mat")
 #CTD_RB1 <- which(CTDData$ctd.list[,1] %in% seq(37,57))
 CTD_RB1 <- which(CTDData$ctd.list[,1] %in% c(37,38,40,41,42,43,44,45,46,47,49,50,51,52,54,55,56,57))
 CTD_RB1_center <- which(CTDData$ctd.list[,1] %in% c(39,48,53))
-CTD_RB1_TMCTD <- which(CTDData$ctd.list[,1] %in% c(37,39,41,46)) # stations with trace metal CTD casts
+CTD_RB1_TMCTD <- which(CTDData$ctd.list[,1] %in% c(37,39,41,46,50)) # stations with trace metal CTD casts
 
 # latitude in decimal degrees
 lat_dec_deg <- CTDData$ctd.list[CTD_RB1,8]
@@ -53,7 +53,7 @@ lon_dec_deg_TMCTD[lon_dec_deg_neg_TMCTD] = 360 + lon_dec_deg_TMCTD[lon_dec_deg_n
 
 cast_labels <- as.character(CTDData$ctd.list[CTD_RB1,1])
 cast_labels_center <- "39,48,53"
-cast_labels_TMCTD <- c("TM26", "TM27", "TM28", "TM29")
+cast_labels_TMCTD <- c("TM26", "TM27", "TM28", "TM29", "TM30")
 # Find Station numbers associated with the Ross Bank CTD casts
 # Select survey 1 of Ross Bank
 #STN_RB1 <- which(CTDData$ctd.data[,2] %in% seq(37,57))
@@ -98,6 +98,9 @@ ggp <- ggp +
 ggp <- ggp +
   geom_point(data=dt4, aes(x = lon_dec_deg_TMCTD[4], y = lat_dec_deg_TMCTD[4]), color="black", size=1) +
   geom_text(aes(x = lon_dec_deg_TMCTD[4], y = lat_dec_deg_TMCTD[4], label=cast_labels_TMCTD[4]), nudge_x = 0.15, nudge_y = 0.0, size=2)
+ggp <- ggp +
+  geom_point(data=dt4, aes(x = lon_dec_deg_TMCTD[5], y = lat_dec_deg_TMCTD[5]), color="black", size=1) +
+  geom_text(aes(x = lon_dec_deg_TMCTD[5], y = lat_dec_deg_TMCTD[5], label=cast_labels_TMCTD[5]), nudge_x = 0.15, nudge_y = 0.0, size=2)
 
 # Use ggsave to save a high resolution png file
 #ggsave("RossBank_CTD_Survey1_ggsave.png", width = 10, height = 8, units = c("cm"), dpi = 1200, bg = "white", scale = 1.25)
