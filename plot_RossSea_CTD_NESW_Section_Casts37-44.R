@@ -2,6 +2,8 @@
 # Blair Greenan
 # Fisheries and Oceans Canada
 # 19 Jan 2023
+# Update: 30 Jul 2023 - seems that there has been a change in the oce package in terms
+# of how it handles water depth (pos/neg), so this required some changes to the script.
 #
 # load libraries
 library(oce)
@@ -86,23 +88,24 @@ RBgrid <- sectionGrid(RB, p=seq(0,1000,10))
 # Reverse the order of the stations so that it is presented in descending order which presents better as West on left and East on right side of plot
 RBgrid2 <- sectionSort(RBgrid, decreasing = TRUE)
 # Add topography to the plot
-RossSeaBathy <- read.topo(file = "C:/Users/greenanb/Documents/Science Projects/Current/Ross Sea/Data/Ross Sea Bathymetry/topo_198W_174W_78.5S_72.5S_1min.nc")
+RossSeaBathy <- read.topo(file = "C:/Science Projects/Ross Sea/Data/Ross Sea Bathymetry/topo_198W_174W_78.5S_72.5S_1min.nc")
+RossSeaBathy@data$z <- -1*RossSeaBathy@data$z
 #dev.new()
 #dev.new()
 # Print figure to a TIFF file format
 tiff("CTD37-44.tiff", width=6, height=6, units='in', res=1200, compression = 'lzw')
 par(mfrow=c(3,2))
-plot(RBgrid2, which="temperature", ztype = "image", zcol = cmocean('thermal'), zbreaks=seq(-2.5, 0.5, 0.1), showBottom = RossSeaBathy, legend.text = 'A', xlab="", ylim = c(0, 600))
+plot(RBgrid2, which="temperature", ztype = "image", zcol = cmocean('thermal'), zbreaks=seq(-2.2, 0.0, 0.1), showBottom = RossSeaBathy, legend.text = 'A', xlab="", ylim = c(600, 0))
 text(5,550,expression("Temperature (\u00B0C)"), adj=0)
-plot(RBgrid2, which="Fluor", ztype = "image", zcol = cmocean('algae'), zbreaks=seq(0, 10, 0.1), showBottom = RossSeaBathy, legend.text = 'B', xlab="", ylim = c(0, 600))
+plot(RBgrid2, which="Fluor", ztype = "image", zcol = cmocean('algae'), zbreaks=seq(0, 10, 0.1), showBottom = RossSeaBathy, legend.text = 'B', xlab="", ylim = c(600, 0))
 text(5,550,expression("Fluorescence (\u03BCg/L)"), adj=0)
-plot(RBgrid2, which="salinity", ztype = "image", zcol = cmocean('haline'), zbreaks=seq(34.4, 34.6, 0.01), showBottom = RossSeaBathy, legend.text = 'C', xlab="", ylim = c(0, 600))
+plot(RBgrid2, which="salinity", ztype = "image", zcol = cmocean('haline'), zbreaks=seq(34.4, 34.6, 0.01), showBottom = RossSeaBathy, legend.text = 'C', xlab="", ylim = c(600, 0))
 text(5,550,"Salinity", adj=0)
-plot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(0, 600))
+plot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
 text(5,550,"Oxygen (ml/L)", adj=0)
-plot(RBgrid2, which="Sig", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.6, 27.9, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(0, 600))
+plot(RBgrid2, which="Sig", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.6, 27.9, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
 text(5,550,"Sigmat", adj=0)
-plot(RBgrid2, which="Trans", ztype = "image", zcol = cmocean('matter'), zbreaks=seq(90, 100, 0.5), showBottom = RossSeaBathy, legend.text = 'F', ylim = c(0, 600))
+plot(RBgrid2, which="Trans", ztype = "image", zcol = cmocean('matter'), zbreaks=seq(90, 100, 0.5), showBottom = RossSeaBathy, legend.text = 'F', ylim = c(600, 0))
 text(5,550,"Transmission (%)", adj=0)
 # Close of the TIFF image to force the write to file
 dev.off()
