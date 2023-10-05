@@ -1,12 +1,17 @@
 # plot_RossBank_CTD_TMCTD_locations_combined_surveys_with_bathy.R
 # Blair Greenan
 # Fisheries and Oceans Canada
-# 12 Jul 2023
+# 05 Oct 2023
 #
 # Description: This script plot the CTD and TMCTD cast locations during the two occupations
-# of Ross Bank on NBP1201. The first survey also show the location of the SeaHorse
-# mooring (red dot) - there was a CTD cast (#42) at that location, but no bottle 
-# data was collected.
+# of Ross Bank on NBP1201. To be honest, this script is a bit of a hack. In order to be able
+# to plot points on top of the filled contour map, I had to create a z-dimension for the data
+# representing the points. This 3rd dimension gets ignored (after a warning message) and 
+# geom_point seems happy enough to plot the point on top of the fill contour map.  If you try to do
+# this with just x,y the function will fail because the the contour plot is a 3D surface mapped to 2D.
+# Anyway, it seems to work.  Not elegantly.  There are a lot of lines in here from
+# the previous version of this script that was just plotting points and adding geom_text labels.
+# It could be cleaner, but not worth my time now.
 
 library(ggplot2)
 library(R.matlab)
@@ -151,58 +156,49 @@ ggp <- ggplot(elevation_df, aes(x = Longitude, y = Latitude, z = Depth)) +
   scale_x_continuous(limits=c(176.8,180.5), breaks=c(177, 178, 179, 180), labels=c("177E", "178E", "179E", "180")) 
 #  + ggtitle("Ross Bank Survey 1")
 
-ggp <- ggp +
-  geom_point(data=dt2, aes(x = lon_dec_deg, y = lat_dec_deg), color = "black", size = 1) + 
-  geom_text(aes(label=cast_labels), nudge_x = 0.04, nudge_y = -0.02, size=3) + 
-  geom_point(data=dt, aes(x = lon, y = lat), color="red", size=1)
+# SeaHorse moooring location
+dt_depth <- c(dt,0)
+names(dt_depth) <- c("Lat", "Lon", "Depth")
+dt_depth <- data.frame(dt_depth)
+ggp <- ggp + geom_point(data=dt_depth, aes(x = Lon, y = Lat, z = Depth), color="black", size=2, shape = 15)
 
-# Add the central CTD station (3 casts)
-ggp <- ggp +
-  geom_point(data=dt3, aes(x = lon_dec_deg_center, y = lat_dec_deg_center), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_center, y = lat_dec_deg_center, label=cast_labels_center), nudge_x = 0, nudge_y = -0.02, size=3)
+# CTD only stations
+zero_depth2 <- c(0,0,0,0,0,0,0,0,0,0,0,0)
+dt2_depth <- data.frame(dt2,zero_depth2)
+# remove some stations that were also TMCTD and SeaHorse
+dt2_depth <- dt2_depth[c(2,4,5,7,8,9,10,11,12),]
+ggp <- ggp + geom_point(data=dt2_depth, aes(x = lon_dec_deg, y = lat_dec_deg, z = zero_depth2), color="red", size=2)
 
-# Add the TMCTD stations (4 casts)
-# for some reason ggplot will only allow the geom_text for the lenght of the original data (18) or length 1, so have to do this 4 times
-ggp <- ggp +
-  geom_point(data=dt4, aes(x = lon_dec_deg_TMCTD[1], y = lat_dec_deg_TMCTD[1]), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_TMCTD[1], y = lat_dec_deg_TMCTD[1], label=cast_labels_TMCTD[1]), nudge_x = 0.15, nudge_y = 0.0, size=3)
-ggp <- ggp +
-  geom_point(data=dt4, aes(x = lon_dec_deg_TMCTD[2], y = lat_dec_deg_TMCTD[2]), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_TMCTD[2], y = lat_dec_deg_TMCTD[2], label=cast_labels_TMCTD[2]), nudge_x = 0.28, nudge_y = 0.0, size=3)
-ggp <- ggp +
-  geom_point(data=dt4, aes(x = lon_dec_deg_TMCTD[3], y = lat_dec_deg_TMCTD[3]), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_TMCTD[3], y = lat_dec_deg_TMCTD[3], label=cast_labels_TMCTD[3]), nudge_x = 0.15, nudge_y = 0.0, size=3)
-ggp <- ggp +
-  geom_point(data=dt4, aes(x = lon_dec_deg_TMCTD[4], y = lat_dec_deg_TMCTD[4]), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_TMCTD[4], y = lat_dec_deg_TMCTD[4], label=cast_labels_TMCTD[4]), nudge_x = 0.15, nudge_y = 0.0, size=3)
-ggp <- ggp +
-  geom_point(data=dt4, aes(x = lon_dec_deg_TMCTD[5], y = lat_dec_deg_TMCTD[5]), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_TMCTD[5], y = lat_dec_deg_TMCTD[5], label=cast_labels_TMCTD[5]), nudge_x = 0.15, nudge_y = 0.0, size=3)
+# CTD station at top of the bank
+#zero_depth3 <- 0
+#dt3_depth <- data.frame(dt3,zero_depth3)
+#ggp <- ggp + geom_point(data=dt3_depth, aes(x = lon_dec_deg_center, y = lat_dec_deg_center, z = zero_depth3), color="red", size=2)
 
-# Add the repeat1 CTD station (2 casts)
-ggp <- ggp +
-  geom_point(data=dt_repeat1, aes(x = lon_dec_deg_repeat1, y = lat_dec_deg_repeat1), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_repeat1, y = lat_dec_deg_repeat1, label=cast_labels_repeat1), nudge_x = 0, nudge_y = -0.02, size=3)
-# Add the repeat2 CTD station (2 casts)
-ggp <- ggp +
-  geom_point(data=dt_repeat2, aes(x = lon_dec_deg_repeat2, y = lat_dec_deg_repeat2), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_repeat2, y = lat_dec_deg_repeat2, label=cast_labels_repeat2), nudge_x = 0, nudge_y = -0.02, size=3)
-# Add the repeat3 CTD station (2 casts)
-ggp <- ggp +
-  geom_point(data=dt_repeat3, aes(x = lon_dec_deg_repeat3, y = lat_dec_deg_repeat3), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_repeat3, y = lat_dec_deg_repeat3, label=cast_labels_repeat3), nudge_x = 0, nudge_y = -0.02, size=3)
-# Add the repeat4 CTD station (2 casts)
-ggp <- ggp +
-  geom_point(data=dt_repeat4, aes(x = lon_dec_deg_repeat4, y = lat_dec_deg_repeat4), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_repeat4, y = lat_dec_deg_repeat4, label=cast_labels_repeat4), nudge_x = 0, nudge_y = -0.02, size=3)
-# Add the repeat5 CTD station (2 casts)
-ggp <- ggp +
-  geom_point(data=dt_repeat5, aes(x = lon_dec_deg_repeat5, y = lat_dec_deg_repeat5), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_repeat5, y = lat_dec_deg_repeat5, label=cast_labels_repeat5), nudge_x = 0, nudge_y = -0.02, size=3)
-# Add the repeat6 CTD station (2 casts)
-ggp <- ggp +
-  geom_point(data=dt_repeat6, aes(x = lon_dec_deg_repeat6, y = lat_dec_deg_repeat6), color="black", size=1) +
-  geom_text(aes(x = lon_dec_deg_repeat6, y = lat_dec_deg_repeat6, label=cast_labels_repeat6), nudge_x = 0, nudge_y = -0.02, size=3)
+# CTD station along diagonal section
+zero_depthr2 <- 0
+dtr2_depth <- data.frame(dt_repeat2,zero_depthr2)
+ggp <- ggp + geom_point(data=dtr2_depth, aes(x = lon_dec_deg_repeat2, y = lat_dec_deg_repeat2, z = zero_depthr2), color="red", size=2)
+
+# CTD station along diagonal section
+zero_depthr3 <- 0
+dtr3_depth <- data.frame(dt_repeat3,zero_depthr3)
+ggp <- ggp + geom_point(data=dtr3_depth, aes(x = lon_dec_deg_repeat3, y = lat_dec_deg_repeat3, z = zero_depthr3), color="red", size=2)
+
+# CTD station along diagonal section
+zero_depthr5 <- 0
+dtr5_depth <- data.frame(dt_repeat5,zero_depthr5)
+ggp <- ggp + geom_point(data=dtr5_depth, aes(x = lon_dec_deg_repeat5, y = lat_dec_deg_repeat5, z = zero_depthr5), color="red", size=2)
+
+# CTD station along diagonal section
+zero_depthr6 <- 0
+dtr6_depth <- data.frame(dt_repeat6,zero_depthr2)
+ggp <- ggp + geom_point(data=dtr6_depth, aes(x = lon_dec_deg_repeat6, y = lat_dec_deg_repeat6, z = zero_depthr6), color="red", size=2)
+
+
+# Trace metal stations
+zero_depth4 <- c(0,0,0,0,0)
+dt4_depth <- data.frame(dt4,zero_depth4)
+ggp <- ggp + geom_point(data=dt4_depth, aes(x = lon_dec_deg_TMCTD, y = lat_dec_deg_TMCTD, z = zero_depth4), color="red", size=2, shape=17)
 
 
 # Use ggsave to save a high resolution png file
