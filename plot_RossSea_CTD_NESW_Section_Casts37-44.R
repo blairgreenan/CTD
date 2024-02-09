@@ -5,6 +5,9 @@
 # Update: 30 Jul 2023 - seems that there has been a change in the oce package in terms
 # of how it handles water depth (pos/neg), so this required some changes to the script.
 #
+# Update: 29 Jan 2024 - applying the bottle calibrations for Chl and O2 that I got from 
+# Dennis (email received on 23 Jan 2024).
+#
 # load libraries
 library(oce)
 library(R.matlab)
@@ -37,6 +40,10 @@ names(stn_list) <- trimws(substr(NBP1201_ctd$list.variables, 5, 19))
 # create a set of unique cast numbers (note that there is a cast 4.2,
 # so that means there are 118 locations with 119 CTD casts)
 cast <- unique(data[['CTD cast']])
+
+# 29 Jan 2024 - apply bottle calibrations
+data$Fluor <- (data$Fluor+0.36)/1.8
+data$Oxy <- (data$Oxy - 1.17)/0.8
 
 # Edit the longitude so that it matches the convention in the Ross Sea bathymetry data
 for (i in 1:length(stn_list[['longitude (deg)']])){
@@ -97,11 +104,13 @@ tiff("CTD37-44.tiff", width=6, height=6, units='in', res=1200, compression = 'lz
 par(mfrow=c(3,2))
 plot(RBgrid2, which="temperature", ztype = "image", zcol = cmocean('thermal'), zbreaks=seq(-2.2, 0.0, 0.1), showBottom = RossSeaBathy, legend.text = 'A', xlab="", ylim = c(600, 0))
 text(2,550,expression("Temperature (\u00B0C)"), adj=0)
-plot(RBgrid2, which="Fluor", ztype = "image", zcol = cmocean('algae'), zbreaks=seq(0, 10, 0.1), showBottom = RossSeaBathy, legend.text = 'B', xlab="", ylim = c(600, 0))
+plot(RBgrid2, which="Fluor", ztype = "image", zcol = cmocean('algae'), zbreaks=seq(0, 7, 0.1), showBottom = RossSeaBathy, legend.text = 'B', xlab="", ylim = c(600, 0))
 text(2,550,expression(paste("Fluorescence (mg Chl-a/", m^3,")")), adj=0)
 plot(RBgrid2, which="salinity", ztype = "image", zcol = cmocean('haline'), zbreaks=seq(34.4, 34.6, 0.01), showBottom = RossSeaBathy, legend.text = 'C', xlab="", ylim = c(600, 0))
 text(2,550,"Salinity", adj=0)
-plot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
+# 29 Jan 2024 - change from using secondary oxygen sensor to primary
+#vplot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
+plot(RBgrid2, which="Oxy", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8.5, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
 text(2,550,"Oxygen (ml/L)", adj=0)
 plot(RBgrid2, which="Sig", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.6, 27.9, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
 text(2,550,"Sigmat", adj=0)
