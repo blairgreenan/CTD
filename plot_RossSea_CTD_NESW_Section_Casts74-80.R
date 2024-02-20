@@ -8,6 +8,8 @@
 # Update: 29 Jan 2024 - applying the bottle calibrations for Chl and O2 that I got from 
 # Dennis (email received on 23 Jan 2024).
 #
+# Update: 20 Feb 2024 - changed the T and S (UNESCO) plots to CT and SA (gsw) 
+#
 # load libraries
 library(oce)
 library(R.matlab)
@@ -98,15 +100,19 @@ RossSeaBathy <- read.topo(file = "C:/Science Projects/Ross Sea/Data/Ross Sea Bat
 RossSeaBathy@data$z <- -1*RossSeaBathy@data$z
 #dev.new()
 #dev.new()
+# set option to gsw
+options(oceEOS="gsw")
 # Print figure to a TIFF file format
-tiff("CTD74-80.tiff", width=6, height=6, units='in', res=1200, compression = 'lzw')
+tiff("CTD74-80_gsw.tiff", width=6, height=6, units='in', res=1200, compression = 'lzw')
 par(mfrow=c(3,2))
-plot(RBgrid2, which="temperature", ztype = "image", zcol = cmocean('thermal'), zbreaks=seq(-2.2, 0.0, 0.1), showBottom = RossSeaBathy, legend.text = 'A', xlab="", ylim = c(600, 0))
+#plot(RBgrid2, which="temperature", ztype = "image", zcol = cmocean('thermal'), zbreaks=seq(-2.2, 0.0, 0.1), showBottom = RossSeaBathy, legend.text = 'A', xlab="", ylim = c(600, 0))
+plot(RBgrid2, which="CT", ztype = "image", zcol = cmocean('thermal'), zbreaks=seq(-2.2, 0.0, 0.1), showBottom = RossSeaBathy, legend.text = 'A', xlab="", ylim = c(600, 0))
 text(2,550,expression("Temperature (\u00B0C)"), adj=0)
 plot(RBgrid2, which="Fluor", ztype = "image", zcol = cmocean('algae'), zbreaks=seq(0, 7, 0.1), showBottom = RossSeaBathy, legend.text = 'B', xlab="", ylim = c(600, 0))
 text(2,550,expression(paste("Fluorescence (mg Chl-a/", m^3,")")), adj=0)
-plot(RBgrid2, which="salinity", ztype = "image", zcol = cmocean('haline'), zbreaks=seq(34.4, 34.6, 0.01), showBottom = RossSeaBathy, legend.text = 'C', xlab="", ylim = c(600, 0))
-text(2,550,"Salinity", adj=0)
+#plot(RBgrid2, which="salinity", ztype = "image", zcol = cmocean('haline'), zbreaks=seq(34.4, 34.6, 0.01), showBottom = RossSeaBathy, legend.text = 'C', xlab="", ylim = c(600, 0), eos = getOption("oceEOS"))
+plot(RBgrid2, which="SA", ztype = "image", zcol = cmocean('haline'), zbreaks=seq(34.5, 34.7, 0.01), showBottom = RossSeaBathy, legend.text = 'C', xlab="", ylim = c(600, 0), eos = getOption("oceEOS"))
+text(2,550,"Salinity (g/kg)", adj=0)
 # 29 Jan 2024 - change from using secondary oxygen sensor to primary
 #vplot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
 plot(RBgrid2, which="Oxy", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8.5, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))

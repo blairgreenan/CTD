@@ -104,57 +104,59 @@ RB_80 <- subset(ctd_section, stationId == 80)
 # make some plots
 png("TS_RB_Leg1_Leg2.png", width = 4800, height = 2400, res = 600)
 par(mfrow=c(1,2))
-plotTS(RB_37_44, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
-plotTS(RB_74_80, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
+plotTS(RB_37_44, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+text(x = 34.88, y = 0.7, labels = "A", col = "black", cex = 1.5)
+plotTS(RB_74_80, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+text(x = 34.88, y = 0.7, labels = "B", col = "black", cex = 1.5)
 dev.off()
 
 # make some plots
 png("TS_RB_37_74.png", width = 4800, height = 2400, res = 600)
 par(mfrow=c(1,2))
-plotTS(RB_37, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
-plotTS(RB_74, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
+plotTS(RB_37, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+plotTS(RB_74, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
 dev.off()
 
 # make some plots
 png("TS_RB_38_75.png", width = 4800, height = 2400, res = 600)
 par(mfrow=c(1,2))
-plotTS(RB_38, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
-plotTS(RB_75, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
+plotTS(RB_38, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+plotTS(RB_75, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
 dev.off()
 
 # make some plots
 png("TS_RB_39_76.png", width = 4800, height = 2400, res = 600)
 par(mfrow=c(1,2))
-plotTS(RB_39, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
-plotTS(RB_76, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
+plotTS(RB_39, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+plotTS(RB_76, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
 dev.off()
 
 # make some plots
 png("TS_RB_40_77.png", width = 4800, height = 2400, res = 600)
 par(mfrow=c(1,2))
-plotTS(RB_40, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
-plotTS(RB_77, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
+plotTS(RB_40, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+plotTS(RB_77, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
 dev.off()
 
 # make some plots
 png("TS_RB_41_78.png", width = 4800, height = 2400, res = 600)
 par(mfrow=c(1,2))
-plotTS(RB_41, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
-plotTS(RB_78, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
+plotTS(RB_41, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+plotTS(RB_78, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
 dev.off()
 
 # make some plots
 png("TS_RB_43_79.png", width = 4800, height = 2400, res = 600)
 par(mfrow=c(1,2))
-plotTS(RB_43, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
-plotTS(RB_79, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
+plotTS(RB_43, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+plotTS(RB_79, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
 dev.off()
 
 # make some plots
 png("TS_RB_44_80.png", width = 4800, height = 2400, res = 600)
 par(mfrow=c(1,2))
-plotTS(RB_44, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
-plotTS(RB_80, Slim = c(34.15, 34.75), Tlim = c(-2.1, 0.8))
+plotTS(RB_44, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
+plotTS(RB_80, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), eos="gsw")
 dev.off()
 
 
