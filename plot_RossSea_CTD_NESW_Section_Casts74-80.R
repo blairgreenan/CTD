@@ -9,6 +9,7 @@
 # Dennis (email received on 23 Jan 2024).
 #
 # Update: 20 Feb 2024 - changed the T and S (UNESCO) plots to CT and SA (gsw) 
+# NOTE: to see what derived values are available in the RBgrid2 section type RBgrid2[["?"]]
 #
 # load libraries
 library(oce)
@@ -117,8 +118,10 @@ text(2,550,"Salinity (g/kg)", adj=0)
 #vplot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
 plot(RBgrid2, which="Oxy", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8.5, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
 text(2,550,"Oxygen (ml/L)", adj=0)
-plot(RBgrid2, which="Sig", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.6, 27.9, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
-text(2,550,"Sigmat", adj=0)
+#plot(RBgrid2, which="Sig", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.6, 27.9, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
+#text(2,550,"Sigmat", adj=0)
+plot(RBgrid2, which="sigma0", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.55, 27.95, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
+text(2,550,expression(paste("Sigma0 (kg/", m^3,")")), adj=0)
 plot(RBgrid2, which="Trans", ztype = "image", zcol = cmocean('matter'), zbreaks=seq(90, 100, 0.5), showBottom = RossSeaBathy, legend.text = 'F', ylim = c(600, 0))
 text(2,550,"Transmission (%)", adj=0)
 # Close of the TIFF image to force the write to file
