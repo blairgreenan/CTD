@@ -104,16 +104,16 @@ RB_80 <- subset(ctd_section, stationId == 80)
 # make some plots
 png("TS_RB_Leg1_color.png", width = 4800, height = 4800, res = 600)
 cm1 <- colormap(RB_37_44[["pressure"]])
-drawPalette(colormap = cm1, zlab = "Depth", cex = 1.5)
-plotTS(RB_37_44, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), pch = 19, cex = 1, cex.axis = 1.5, cex.lab = 1.5, cex.rho = 1, col = cm1$zcol, eos="gsw", mar = par("mar"))
+drawPalette(colormap = cm1, zlab = "Depth [m]", cex = 1.25)
+plotTS(RB_37_44, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), pch = 19, cex = 1, cex.axis = 1.25, cex.lab = 1.25, cex.rho = 1, col = cm1$zcol, eos="gsw", mar = par("mar"))
 text(x = 34.88, y = 0.7, labels = "A", col = "black", cex = 2)
 dev.off()
 
 # make some plots
 png("TS_RB_Leg2_color.png", width = 4800, height = 4800, res = 600)
 cm2 <- colormap(RB_74_80[["pressure"]])
-drawPalette(colormap = cm2, zlab = "Depth", cex = 1.5)
-plotTS(RB_74_80, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), pch = 19, cex = 1, cex.axis = 1.5, cex.lab = 1.5, cex.rho = 1, col = cm2$zcol, eos="gsw", mar = par("mar"))
+drawPalette(colormap = cm2, zlab = "Depth [m]", cex = 1.25)
+plotTS(RB_74_80, Slim = c(34.3, 34.9), Tlim = c(-2.1, 0.8), pch = 19, cex = 1, cex.axis = 1.25, cex.lab = 1.25, cex.rho = 1, col = cm2$zcol, eos="gsw", mar = par("mar"))
 text(x = 34.88, y = 0.7, labels = "B", col = "black", cex = 2)
 dev.off()
 
