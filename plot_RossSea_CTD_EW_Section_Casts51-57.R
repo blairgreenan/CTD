@@ -118,7 +118,7 @@ text(2,550,"Salinity (g/kg)", adj=0)
 # 04 Jul 2024 - back to secondary for this section because of bad primary DO at Stn 50
 plot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8.5, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
 #plot(RBgrid2, which="Oxy", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8.5, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
-text(2,550,"Oxygen (ml/L)", adj=0)
+text(2,550,"Oxygen (mL/L)", adj=0)
 plot(RBgrid2, which="Sig", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.6, 27.9, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
 text(2,550,"Sigmat", adj=0)
 plot(RBgrid2, which="Trans", ztype = "image", zcol = cmocean('matter'), zbreaks=seq(90, 100, 0.5), showBottom = RossSeaBathy, legend.text = 'F', ylim = c(600, 0))

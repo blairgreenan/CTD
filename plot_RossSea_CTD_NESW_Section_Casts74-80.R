@@ -117,7 +117,7 @@ text(2,550,"Salinity (g/kg)", adj=0)
 # 29 Jan 2024 - change from using secondary oxygen sensor to primary
 #vplot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
 plot(RBgrid2, which="Oxy", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8.5, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
-text(2,550,"Oxygen (ml/L)", adj=0)
+text(2,550,"Oxygen (mL/L)", adj=0)
 #plot(RBgrid2, which="Sig", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.6, 27.9, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
 #text(2,550,"Sigmat", adj=0)
 plot(RBgrid2, which="sigma0", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.55, 27.95, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
