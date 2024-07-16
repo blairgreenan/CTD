@@ -8,7 +8,7 @@
 # Update: 29 Jan 2024 - applying the bottle calibrations for Chl and O2 that I got from 
 # Dennis (email received on 23 Jan 2024).
 #
-# Update: 20 Feb 2024 - changed the T and S (UNESCO) plots to CT and SA (gsw) 
+# Update: 20 Feb 2024 - changed the T and S (UNESCO) plots to CT and SA (gsw)
 # NOTE: to see what derived values are available in the RBgrid2 section type RBgrid2[["?"]]
 #
 # load libraries
@@ -90,8 +90,9 @@ for (i in seq_along(cast)) {
 
 # Create a section using the function from the oce package
 ctd_section <- as.section(ctd)
-# Create a subset for the 2nd occupation of NE-SW section over Ross Bank CTD casts 74-80
-RB <- subset(ctd_section, 74 <= stationId & stationId <= 80)
+# Create a subset for the NE-SW section over Ross Bank CTD casts 37-44
+# Note that cast 42 is not included because this was a calibration cast at the SeaHorse mooring site and not a part of the CTD secion
+RB <- subset(ctd_section, 37 <= stationId & stationId <= 44 & stationId != 42)
 # Grid the data in the subset using the oce SectionGrid function
 RBgrid <- sectionGrid(RB, p=seq(0,1000,10))
 # Reverse the order of the stations so that it is presented in descending order which presents better as West on left and East on right side of plot
@@ -104,26 +105,11 @@ RossSeaBathy@data$z <- -1*RossSeaBathy@data$z
 # set option to gsw
 options(oceEOS="gsw")
 # Print figure to a TIFF file format
-tiff("CTD74-80_gsw.tiff", width=6, height=6, units='in', res=1200, compression = 'lzw')
-par(mfrow=c(3,2))
-#plot(RBgrid2, which="temperature", ztype = "image", zcol = cmocean('thermal'), zbreaks=seq(-2.2, 0.0, 0.1), showBottom = RossSeaBathy, legend.text = 'A', xlab="", ylim = c(600, 0))
-plot(RBgrid2, which="CT", ztype = "image", zcol = cmocean('thermal'), zbreaks=seq(-2.2, 0.0, 0.1), showBottom = RossSeaBathy, legend.text = 'A', xlab="", ylim = c(600, 0))
-text(2,550,expression("Temperature (\u00B0C)"), adj=0)
-plot(RBgrid2, which="Fluor", ztype = "image", zcol = cmocean('algae'), zbreaks=seq(0, 7, 0.1), showBottom = RossSeaBathy, legend.text = 'B', xlab="", ylim = c(600, 0))
-text(2,550,expression(paste("Fluorescence (mg Chl-a ", m^-3,")")), adj=0)
-#plot(RBgrid2, which="salinity", ztype = "image", zcol = cmocean('haline'), zbreaks=seq(34.4, 34.6, 0.01), showBottom = RossSeaBathy, legend.text = 'C', xlab="", ylim = c(600, 0), eos = getOption("oceEOS"))
-plot(RBgrid2, which="SA", ztype = "image", zcol = cmocean('haline'), zbreaks=seq(34.5, 34.7, 0.01), showBottom = RossSeaBathy, legend.text = 'C', xlab="", ylim = c(600, 0), eos = getOption("oceEOS"))
-text(2,550,expression(paste("Salinity (g ", kg^-1,")")), adj=0)
-# 29 Jan 2024 - change from using secondary oxygen sensor to primary
-#vplot(RBgrid2, which="Oxy_s", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
-plot(RBgrid2, which="Oxy", ztype = "image", zcol = cmocean('oxy'), zbreaks=seq(6, 8.5, 0.1), showBottom = RossSeaBathy, legend.text = 'D', xlab="", ylim = c(600, 0))
-text(2,550,expression(paste("Oxygen (mL ", L^-1,")")), adj=0)
-#plot(RBgrid2, which="Sig", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.6, 27.9, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
-#text(2,550,"Sigmat", adj=0)
-plot(RBgrid2, which="sigma0", ztype = "image", zcol = cmocean('dense'), zbreaks=seq(27.55, 27.95, 0.01), showBottom = RossSeaBathy, legend.text = 'E', ylim = c(600, 0))
-text(2,550,expression(paste("Sigma0 (kg ", m^-3,")")), adj=0)
-plot(RBgrid2, which="Trans", ztype = "image", zcol = cmocean('matter'), zbreaks=seq(90, 100, 0.5), showBottom = RossSeaBathy, legend.text = 'F', ylim = c(600, 0))
-text(2,550,"Transmission (%)", adj=0)
+tiff("CTD37-44_gsw_percentPAR.tiff", width=6, height=6, units='in', res=1200, compression = 'lzw')
+# Calculate the percent PAR (i.e., CTD PAR divided by Surface PAR)
+percentPAR <- (RBgrid2[["Par"]]/RBgrid2[["Spar"]])*100
+# Zoom in on the 0-10% PAR range and depth of 1-100m to get an idea about where the 1% light level is
+plot(percentPAR, RBgrid2[["pressure"]], xlim = c(0, 10), ylim = c(0, 100))
 # Close of the TIFF image to force the write to file
 dev.off()
 
